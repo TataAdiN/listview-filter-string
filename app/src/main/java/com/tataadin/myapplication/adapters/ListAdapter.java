@@ -14,11 +14,11 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "ListAdapter";
-    List<String> movieList;
+    List<String> poepleList;
     private ListItemLayoutBinding binding;
 
     public ListAdapter(List<String> movieList){
-        this.movieList = movieList;
+        this.poepleList = movieList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -37,16 +37,29 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
-
+        String people = poepleList.get(position);
+        binding.peopleName.setText(people);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return poepleList.size();
     }
 
     @Override
     public Filter getFilter() {
-        return null;
+        return filter;
     }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return null;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+        }
+    };
 }

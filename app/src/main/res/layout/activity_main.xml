@@ -7,24 +7,15 @@
         android:layout_height="match_parent"
         tools:context="com.tataadin.myapplication.MainActivity">
 
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/searchFilter"
-            android:autofillHints="Search here..."
-            android:inputType="text"
-            tools:ignore="LabelFor"/>
-
     <SearchView
             android:id="@+id/searchView"
-            android:layout_below="@+id/searchFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:iconifiedByDefault="false"
             android:queryHint="type here..."
             android:inputType="text"/>
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/searchView"
