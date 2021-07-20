@@ -1,6 +1,7 @@
 package com.tataadin.myapplication;
 
 import android.os.Bundle;
+import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -10,6 +11,7 @@ import com.tataadin.myapplication.adapters.ListAdapter;
 import com.tataadin.myapplication.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,15 +20,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        ArrayList<String> names = new ArrayList<>();
-        names.add("Mitch");
-        names.add("Blake");
-        names.add("Shelly");
-        names.add("Jess");
-        names.add("Steve");
-        names.add("Mohammed");
+        List<String> people = new ArrayList<>();
+        people.add("Mitch");
+        people.add("Blake");
+        people.add("Shelly");
+        people.add("Jess");
+        people.add("Steve");
+        people.add("Mohammed");
 
-        ListAdapter adapter = new ListAdapter(names);
+        ListAdapter adapter = new ListAdapter(people);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         viewBinding.theList.setLayoutManager(mLayoutManager);
         viewBinding.theList.setItemAnimator(new DefaultItemAnimator());
@@ -34,6 +36,18 @@ public class MainActivity extends AppCompatActivity {
         viewBinding.theList.setAdapter(adapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         viewBinding.theList.addItemDecoration(dividerItemDecoration);
+        viewBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         setContentView(viewBinding.getRoot());
     }
 

@@ -1,24 +1,30 @@
 package com.tataadin.myapplication.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.tataadin.myapplication.databinding.ListItemLayoutBinding;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements Filterable {
 
-    private static final String TAG = "ListAdapter";
-    List<String> poepleList;
+    List<String> peopleList;
+    List<String> peopleListAll;
     private ListItemLayoutBinding binding;
 
-    public ListAdapter(List<String> movieList){
-        this.poepleList = movieList;
+    public ListAdapter(List<String> peopleList){
+        this.peopleList = peopleList;
+        peopleListAll = new ArrayList<>();
+        peopleListAll.addAll(peopleList);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -37,13 +43,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
-        String people = poepleList.get(position);
+        Log.d("list2", peopleList.toString());
+        String people = peopleList.get(position);
+        Log.d("filter2", people);
+        Log.d("position", ""+position);
         binding.peopleName.setText(people);
+        binding.peopleName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), people,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return poepleList.size();
+        return peopleList.size();
     }
 
     @Override
@@ -54,12 +69,29 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
     Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            return null;
+            List<String> filteredPeople = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0){
+                filteredPeople.addAll(peopleListAll);
+            }else{
+                for (String people:peopleListAll) {
+                    if(people.toLowerCase().contains(constraint.toString().toLowerCase())){
+                        Log.d("filter", constraint.toString());
+                        filteredPeople.add(people);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredPeople;
+            return filterResults;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
+            peopleList.clear();
+            peopleList.addAll((Collection<?extends String>) results.values);
+            Log.d("list", peopleList.toString());
+            notifyDataSetChanged();
         }
     };
 }
