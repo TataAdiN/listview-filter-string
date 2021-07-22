@@ -48,12 +48,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         Log.d("filter2", people);
         Log.d("position", ""+position);
         binding.peopleName.setText(people);
-        binding.peopleName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), people,Toast.LENGTH_SHORT).show();
-            }
-        });
+        binding.peopleName.setOnClickListener(v -> Toast.makeText(v.getContext(), people,Toast.LENGTH_SHORT).show());
     }
 
     @Override
