@@ -3,8 +3,6 @@ package com.tataadin.myapplication;
 import android.os.Bundle;
 import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.tataadin.myapplication.adapters.ListAdapter;
@@ -28,14 +26,13 @@ public class MainActivity extends AppCompatActivity {
         people.add("Steve");
         people.add("Mohammed");
 
+
         ListAdapter adapter = new ListAdapter(people);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        viewBinding.theList.setLayoutManager(mLayoutManager);
-        viewBinding.theList.setItemAnimator(new DefaultItemAnimator());
 
+        viewBinding.theList.setHasFixedSize(true);
+        viewBinding.theList.setLayoutManager(mLayoutManager);
         viewBinding.theList.setAdapter(adapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        viewBinding.theList.addItemDecoration(dividerItemDecoration);
         viewBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

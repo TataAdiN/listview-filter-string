@@ -6,39 +6,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.tataadin.myapplication.databinding.ListItemLayoutBinding;
+import com.tataadin.myapplication.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> implements Filterable {
 
     List<String> peopleList;
     List<String> peopleListAll;
-    private ListItemLayoutBinding binding;
 
     public ListAdapter(List<String> peopleList){
         this.peopleList = peopleList;
-        peopleListAll = new ArrayList<>();
-        peopleListAll.addAll(peopleList);
+        peopleListAll = new ArrayList<>(peopleList);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-
+        TextView peopleName;
         public ViewHolder(View view){
             super(view);
+            peopleName = view.findViewById(R.id.people_name);
         }
     }
 
     @NonNull
     @Override
     public ListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = ListItemLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(binding.getRoot());
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_layout, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -47,8 +46,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         String people = peopleList.get(position);
         Log.d("filter2", people);
         Log.d("position", ""+position);
-        binding.peopleName.setText(people);
-        binding.peopleName.setOnClickListener(v -> Toast.makeText(v.getContext(), people,Toast.LENGTH_SHORT).show());
+        holder.peopleName.setText(people);
+        holder.peopleName.setOnClickListener(v -> Toast.makeText(v.getContext(), people,Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -70,7 +69,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
                 filteredPeople.addAll(peopleListAll);
             }else{
                 for (String people:peopleListAll) {
-                    if(people.toLowerCase().contains(constraint.toString().toLowerCase())){
+                    if(people.toLowerCase().contains(constraint.toString().toLowerCase().trim())){
                         Log.d("filter", constraint.toString());
                         filteredPeople.add(people);
                     }
@@ -84,7 +83,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             peopleList.clear();
-            peopleList.addAll((Collection<?extends String>) results.values);
+            peopleList.addAll((List) results.values);
             Log.d("list", peopleList.toString());
             notifyDataSetChanged();
         }
